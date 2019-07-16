@@ -1,0 +1,29 @@
+heat_template_version: "2018-08-31"
+description: "version 2017-09-01 created by HOT Generator at Fri, 21 Jun 2019 09:23:45 GMT."
+resources: 
+  Server_1: 
+    type: "OS::Nova::Server"
+    properties: 
+      scheduler_hints: 
+        group: "fe007ac5-f0a9-402d-b80f-659db15d70a6"
+      block_device_mapping_v2: 
+        - volume_id: "c7491fcb-ae1b-4f3a-843a-8440d8d4694b"
+      networks: 
+        - network: "43bef533-94d1-4586-92a8-8153d2189658"
+      name: FreeNas2
+      flavor: "m1.medium"
+      availability_zone: "zone lab"
+  VolumeAttachment_1: 
+    type: "OS::Cinder::VolumeAttachment"
+    properties: 
+      instance_uuid: { get_resource: Server_1 }
+      volume_id: "19396498-2d94-41e6-a91a-756f24183960"
+  FloatingIP_1: 
+    type: "OS::Neutron::FloatingIP"
+    properties: 
+      floating_network: "d5d6a1ea-a68e-470e-8dea-2dc2bdee5196"
+  FloatingIPAssociation_1: 
+    type: "OS::Neutron::FloatingIPAssociation"
+    properties: 
+      floatingip_id: { get_resource: FloatingIP_1 }
+      port_id: { get_attr: [ Server_1, addresses, "43bef533-94d1-4586-92a8-8153d2189658", 0, port ] }

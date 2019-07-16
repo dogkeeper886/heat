@@ -1,0 +1,23 @@
+heat_template_version: "2018-08-31"
+description: "version 2017-09-01 created by HOT Generator at Mon, 17 Jun 2019 02:54:37 GMT."
+resources: 
+  Server_1: 
+    type: "OS::Nova::Server"
+    properties: 
+      scheduler_hints: 
+        group: "fe007ac5-f0a9-402d-b80f-659db15d70a6"
+      networks: 
+        - network: "43bef533-94d1-4586-92a8-8153d2189658"
+      name: "Windows"
+      flavor: "m1.medium"
+      image: "cba5f250-abb7-4e45-adbf-afa6cfcb12eb"
+      availability_zone: "zone lab"
+  FloatingIP_1: 
+    type: "OS::Neutron::FloatingIP"
+    properties: 
+      floating_network: "d5d6a1ea-a68e-470e-8dea-2dc2bdee5196"
+  FloatingIPAssociation_1: 
+    type: "OS::Neutron::FloatingIPAssociation"
+    properties: 
+      floatingip_id: { get_resource: FloatingIP_1 }
+      port_id: { get_attr: [ Server_1, addresses, "43bef533-94d1-4586-92a8-8153d2189658", 0, port ] }
