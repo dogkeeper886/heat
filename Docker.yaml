@@ -9,7 +9,7 @@ resources:
       networks: 
         - network: "43bef533-94d1-4586-92a8-8153d2189658"
       name: "Docker"
-      flavor: "m1.large"
+      flavor: "m1.medium"
       image: "1b7445f1-5ea3-41c6-bc9d-7ef6de03f09f"
       availability_zone: "zone lab"
   FloatingIP_1: 
