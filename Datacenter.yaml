@@ -1,0 +1,43 @@
+heat_template_version: "2018-08-31"
+description: "version 2017-09-01 created by HOT Generator at Mon, 17 Jun 2019 02:54:37 GMT."
+resources: 
+  Server_3: 
+    type: "OS::Nova::Server"
+    properties: 
+      scheduler_hints: 
+        group: "db69f2e6-063e-4809-a2d2-a3f44df85541"
+      networks: 
+        - network: "809e8f29-719c-46c0-b8ff-af8651a1d152"
+      name: "vSZ 5.2 Test Build"
+      flavor: "m1.xlarge"
+      image: "26d6d7fb-ceed-4d50-a7ef-3de5a5581c5f"
+      availability_zone: "zone datacenter2"
+  FloatingIP_3: 
+    type: "OS::Neutron::FloatingIP"
+    properties: 
+      floating_network: "010a2577-00f3-471d-ac0c-20ec0f6a558a"
+  FloatingIPAssociation_3: 
+    type: "OS::Neutron::FloatingIPAssociation"
+    properties: 
+      floatingip_id: { get_resource: FloatingIP_3 }
+      port_id: { get_attr: [ Server_3, addresses, "809e8f29-719c-46c0-b8ff-af8651a1d152", 1, port ] }
+  Server_4: 
+    type: "OS::Nova::Server"
+    properties: 
+      scheduler_hints: 
+        group: "db69f2e6-063e-4809-a2d2-a3f44df85541"
+      networks: 
+        - network: "809e8f29-719c-46c0-b8ff-af8651a1d152"
+      name: "vSZ 5.1.2 Test Build"
+      flavor: "m1.xlarge"
+      image: "210aa618-553c-4bed-a837-c8ec66c32fb5"
+      availability_zone: "zone datacenter2"
+  FloatingIP_4: 
+    type: "OS::Neutron::FloatingIP"
+    properties: 
+      floating_network: "010a2577-00f3-471d-ac0c-20ec0f6a558a"
+  FloatingIPAssociation_4: 
+    type: "OS::Neutron::FloatingIPAssociation"
+    properties: 
+      floatingip_id: { get_resource: FloatingIP_4 }
+      port_id: { get_attr: [ Server_4, addresses, "809e8f29-719c-46c0-b8ff-af8651a1d152", 1, port ] }      

@@ -1,0 +1,63 @@
+heat_template_version: "2018-08-31"
+description: "version 2017-09-01 created by HOT Generator at Mon, 17 Jun 2019 02:54:37 GMT."
+resources: 
+  Server_1: 
+    type: "OS::Nova::Server"
+    properties: 
+      scheduler_hints: 
+        group: "dc354325-8f83-4491-ac8f-bd656c6b9fb3"
+      networks: 
+        - network: "f785bd3b-2e29-4153-8518-6ddbf3232f67"
+      name: "Docker"
+      flavor: "m1.medium"
+      image: "12a14b1c-9aa4-4993-8ef6-8fb90591a2ef"
+      availability_zone: "zone lab"
+  FloatingIP_1: 
+    type: "OS::Neutron::FloatingIP"
+    properties: 
+      floating_network: "93b04286-a477-4e08-8ea8-f9344f399068"
+  FloatingIPAssociation_1: 
+    type: "OS::Neutron::FloatingIPAssociation"
+    properties: 
+      floatingip_id: { get_resource: FloatingIP_1 }
+      port_id: { get_attr: [ Server_1, addresses, "f785bd3b-2e29-4153-8518-6ddbf3232f67", 0, port ] }
+  Server_2: 
+    type: "OS::Nova::Server"
+    properties: 
+      scheduler_hints: 
+        group: "dc354325-8f83-4491-ac8f-bd656c6b9fb3"
+      networks: 
+        - network: "f785bd3b-2e29-4153-8518-6ddbf3232f67"
+      name: "AutoTe1"
+      flavor: "auto.te"
+      image: "f33e0445-bb5c-4073-ad90-719393adc4b8"
+      availability_zone: "zone lab"
+  FloatingIP_2: 
+    type: "OS::Neutron::FloatingIP"
+    properties: 
+      floating_network: "93b04286-a477-4e08-8ea8-f9344f399068"
+  FloatingIPAssociation_2: 
+    type: "OS::Neutron::FloatingIPAssociation"
+    properties: 
+      floatingip_id: { get_resource: FloatingIP_2 }
+      port_id: { get_attr: [ Server_2, addresses, "f785bd3b-2e29-4153-8518-6ddbf3232f67", 0, port ] }
+  Server_3: 
+    type: "OS::Nova::Server"
+    properties: 
+      scheduler_hints: 
+        group: "dc354325-8f83-4491-ac8f-bd656c6b9fb3"
+      networks: 
+        - network: "f785bd3b-2e29-4153-8518-6ddbf3232f67"
+      name: "AutoTe2"
+      flavor: "auto.te"
+      image: "f33e0445-bb5c-4073-ad90-719393adc4b8"
+      availability_zone: "zone lab"
+  FloatingIP_3: 
+    type: "OS::Neutron::FloatingIP"
+    properties: 
+      floating_network: "93b04286-a477-4e08-8ea8-f9344f399068"
+  FloatingIPAssociation_3: 
+    type: "OS::Neutron::FloatingIPAssociation"
+    properties: 
+      floatingip_id: { get_resource: FloatingIP_3 }
+      port_id: { get_attr: [ Server_3, addresses, "f785bd3b-2e29-4153-8518-6ddbf3232f67", 0, port ] }
