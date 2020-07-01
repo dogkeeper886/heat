@@ -1,0 +1,75 @@
+﻿heat_template_version: "2018-08-31"
+description: "version 2017-09-01 created by HOT Generator at Wed, 10 Jun 2020 05:41:20 GMT."
+resources: 
+  Server_1: 
+    type: "OS::Nova::Server"
+    properties: 
+      security_groups: 
+        - { get_resource: SecurityGroup_1 }
+      name: "vsz-1"
+      flavor: normal
+      image: "vscg-5.2.1.0.398"
+      availability_zone: data
+      networks:
+        - network: "vxlan 234"
+      scheduler_hints:
+        group: { get_resource: Server_Group_1 }
+  Server_2: 
+    type: "OS::Nova::Server"
+    properties: 
+      security_groups: 
+        - { get_resource: SecurityGroup_1 }
+      name: "vsz-2"
+      flavor: normal
+      image: "vscg-5.2.1.0.398"
+      availability_zone: data
+      networks:
+        - network: "vxlan 234"
+      scheduler_hints:
+        group: { get_resource: Server_Group_1 }
+  FloatingIP_1: 
+    type: "OS::Neutron::FloatingIP"
+    properties: 
+      floating_network: "data office"
+  FloatingIP_2: 
+    type: "OS::Neutron::FloatingIP"
+    properties: 
+      floating_network: "data office"
+  Server_Group_1:
+    type: "OS::Nova::ServerGroup"
+    properties:
+      policies:
+        - "anti-affinity"
+  FloatingIPAssociation_1: 
+    type: "OS::Neutron::FloatingIPAssociation"
+    properties: 
+      floatingip_id: { get_resource: FloatingIP_1 }
+      port_id: { get_attr: [ Server_1, addresses, "vxlan 234", 0, port ] }
+  FloatingIPAssociation_2:
+    type: "OS::Neutron::FloatingIPAssociation"
+    properties:
+      floatingip_id: { get_resource: FloatingIP_2 }
+      port_id: { get_attr: [ Server_2, addresses, "vxlan 234", 0, port ] }
+  SecurityGroup_1: 
+    type: "OS::Neutron::SecurityGroup"
+    properties: 
+      rules: 
+        - direction: ingress
+          ethertype: IPv4
+          protocol: icmp
+          remote_mode: remote_ip_prefix
+          remote_ip_prefix: "0.0.0.0/0"
+        - direction: ingress
+          ethertype: IPv4
+          protocol: tcp
+          remote_mode: remote_ip_prefix
+          remote_ip_prefix: "0.0.0.0/0"
+          port_range_min: 22
+          port_range_max: 22
+        - direction: ingress
+          ethertype: IPv4
+          protocol: tcp
+          remote_mode: remote_ip_prefix
+          remote_ip_prefix: "0.0.0.0/0"
+          port_range_min: 8443
+          port_range_max: 8443
